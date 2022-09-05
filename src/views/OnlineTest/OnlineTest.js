@@ -1,8 +1,13 @@
 import React, { useState } from 'react'
 import Box from '@mui/material/Box'
 import makeStyles from '@mui/styles/makeStyles'
-import {Typography, TextField, Button} from '@mui/material'
+import {Typography, TextField, Button, AppBar, Toolbar} from '@mui/material'
 import { useNavigate } from 'react-router'
+import logo from '../../assets/logo.png'
+import {useDispatch } from 'react-redux'
+import { authentication } from '../../store/counterSlice'
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const OnlineTest = () => {
+  const dispatch = useDispatch()
   const classes = useStyles()
   const initialValues = {
     name : "",
@@ -61,17 +67,29 @@ const OnlineTest = () => {
     setFormValues({...formValues, [name]: value});
     
   };
+  const authEmail = 'smudasser36@gmail.com'
+  const authPassword = 'Madina4455*'
   const handleFormSubmit =(e) => {
       e.preventDefault()
-      // console.log(formValues.ID.length)
-        if(formValues.name.length > 4 && formValues.ID.length>4) {
-          // setFormValues(initialValues)
-          navigate('/welcome',{state:{id:formValues.ID ,name:formValues.name}})
+        if(formValues.name === authEmail && formValues.ID ===authPassword) {
+          alert('Login Done')
+          dispatch(authentication(true))
+          navigate('/home')
+
+        }
+        else {
+          alert("Credential are wrong")
         }
       
   }
  
   return (
+    <>
+    <AppBar>
+      <Toolbar>
+      <img alt="logo" src={logo} width='60px'/>
+      </Toolbar>
+    </AppBar>
     <Box className={classes.root}>
       <Box className={classes.mainBox}>
         <Box className={classes.login}>
@@ -79,8 +97,8 @@ const OnlineTest = () => {
         </Box>
           <Box className={classes.textFieldContainer}>
           <form onSubmit={handleFormSubmit}>
-          <TextField label='Name' name='name' value={formValues.name} onChange={handleChange} fullWidth required/> 
-          <TextField label='Registration ID' fullWidth name='ID' value={formValues.ID} onChange={handleChange} style={{marginTop:'5%'}} required /> 
+          <TextField label='Email' name='name' value={formValues.name} onChange={handleChange} fullWidth required/> 
+          <TextField label='Password' type='password' fullWidth name='ID' value={formValues.ID} onChange={handleChange} style={{marginTop:'5%'}} required /> 
           <Box className={classes.btnContainer}>
           <Button variant='contained' className={classes.btn} type='submit'> Log In</Button>
           </Box>
@@ -90,6 +108,7 @@ const OnlineTest = () => {
       </Box>
       
     </Box>
+    </>
   )
 }
 
